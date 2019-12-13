@@ -66,6 +66,9 @@ int main()
 		exit(1);
 	}
 	init_snake(row, col);
+	clear();
+	draw_snake();
+	refresh();
 
 	while ((ch = getch()) != 'q') {
 		int y = S.y[S.ihead];
