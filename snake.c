@@ -6,7 +6,7 @@
 #define CH_HEAD '@'
 #define CH_FOOD 'x'
 #define MAX_LEN 1000
-#define START_LEN 5
+#define START_LEN 50
 #define MIN_ROW 20
 #define MIN_COL 20
 
@@ -29,6 +29,7 @@ void init_snake(int row, int col)
 		S.b[S.ihead].x = row + S.ihead;
 		S.b[S.ihead].y = col;
 	}
+	--S.ihead;
 	S.len = START_LEN;
 }
 
