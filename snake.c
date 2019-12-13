@@ -18,7 +18,8 @@ struct point {
 struct snake {
 	int len;
 	int ihead;
-	struct point b[MAX_LEN];
+	int x[MAX_LEN];
+	int y[MAX_LEN];
 } S;
 
 void init_snake(int row, int col)
@@ -26,8 +27,8 @@ void init_snake(int row, int col)
 	row = (row - START_LEN) / 2;
 	col /= 2;
 	for (S.ihead = 0; S.ihead < START_LEN; ++S.ihead) {
-		S.b[S.ihead].x = row + S.ihead;
-		S.b[S.ihead].y = col;
+		S.x[S.ihead] = row + S.ihead;
+		S.y[S.ihead] = col;
 	}
 	--S.ihead;
 	S.len = START_LEN;
@@ -36,18 +37,18 @@ void init_snake(int row, int col)
 void draw_snake()
 {
 	int i;
-	mvaddch(S.b[S.ihead].y, S.b[S.ihead].x, CH_HEAD);
+	mvaddch(S.y[S.ihead], S.x[S.ihead], CH_HEAD);
 	for (i = 1; i < S.len && i < MAX_LEN; ++i)
-		mvaddch(S.b[(MAX_LEN + S.ihead - i) % MAX_LEN].y,
-		        S.b[(MAX_LEN + S.ihead - i) % MAX_LEN].x,
+		mvaddch(S.y[(MAX_LEN + S.ihead - i) % MAX_LEN],
+		        S.x[(MAX_LEN + S.ihead - i) % MAX_LEN],
 		        CH_BODY);
 }
 
 void mv_snake(int y, int x)
 {
 	++S.ihead;
-	S.b[S.ihead % MAX_LEN].y = y;
-	S.b[S.ihead % MAX_LEN].x = x;
+	S.y[S.ihead % MAX_LEN] = y;
+	S.x[S.ihead % MAX_LEN] = x;
 }
 
 int main()
@@ -67,8 +68,8 @@ int main()
 	init_snake(row, col);
 
 	while ((ch = getch()) != 'q') {
-		int y = S.b[S.ihead].y;
-		int x = S.b[S.ihead].x;
+		int y = S.y[S.ihead];
+		int x = S.x[S.ihead];
 
 		switch(ch) {
 		case 'W': case 'w': case KEY_UP:
