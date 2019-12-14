@@ -9,6 +9,8 @@
 #define START_LEN 50
 #define MIN_ROW 20
 #define MIN_COL 20
+#define rel_ind(r) ((MAX_LEN + S.ihead + (r)) % MAX_LEN)
+enum dir { UP, DOWN, RIGHT, LEFT };
 
 struct point {
 	int y;
@@ -44,16 +46,49 @@ void draw_snake()
 		        CH_BODY);
 }
 
-void mv_snake(int y, int x)
+void mv_snake(enum dir dir)
 {
+	int y = S.y[S.ihead];
+	int x = S.x[S.ihead];
+
+	/* prevent movement inside oneself */
+	if (S.len > 1) {
+		enum dir prev;
+		if      (S.x[S.ihead] - S.x[rel_ind(-1)] == 1)
+			prev = RIGHT;
+		else if (S.x[S.ihead] - S.x[rel_ind(-1)] == -1)
+			prev = LEFT;
+		else if (S.y[S.ihead] - S.y[rel_ind(-1)] == 1)
+			prev = DOWN;
+		else
+			prev = UP;
+
+		if      (dir == LEFT  && prev == RIGHT)
+			dir = RIGHT;
+		else if (dir == RIGHT && prev == LEFT)
+			dir = LEFT;
+		else if (dir == UP    && prev == DOWN)
+			dir = DOWN;
+		else if (dir == DOWN  && prev == UP)
+			dir = UP;
+	}
+
+	switch(dir) {
+	case UP   : --y; break;
+	case LEFT : --x; break;
+	case DOWN : ++y; break;
+	case RIGHT: ++x; break;
+	}
+
 	++S.ihead;
-	S.y[S.ihead % MAX_LEN] = y;
-	S.x[S.ihead % MAX_LEN] = x;
+	S.y[rel_ind(0)] = y;
+	S.x[rel_ind(0)] = x;
 }
 
 int main()
 {
 	int ch;
+	enum dir dir;
 	int row, col;
 
 	initscr();
@@ -66,33 +101,21 @@ int main()
 		fprintf(stderr, "Screen should be at least %d x %d\n", MIN_COL, MIN_ROW);
 		exit(1);
 	}
+
 	init_snake(row, col);
 	clear();
 	draw_snake();
 	refresh();
 
 	while ((ch = getch()) != 'q') {
-		int y = S.y[S.ihead];
-		int x = S.x[S.ihead];
-
 		switch(ch) {
-		case 'W': case 'w': case KEY_UP:
-			--y;
-			break;
-		case 'A': case 'a': case KEY_LEFT:
-			--x;
-			break;
-		case 'S': case 's': case KEY_DOWN:
-			++y;
-			break;
-		case 'D': case 'd': case KEY_RIGHT:
-			++x;
-			break;
-		default:
-			break;
+		case 'W': case 'w': case KEY_UP   : dir = UP   ; break;
+		case 'A': case 'a': case KEY_LEFT : dir = LEFT ; break;
+		case 'S': case 's': case KEY_DOWN : dir = DOWN ; break;
+		case 'D': case 'd': case KEY_RIGHT: dir = RIGHT; break;
 		}
 
-		mv_snake(y, x);
+		mv_snake(dir);
 		clear();
 		draw_snake();
 		refresh();
