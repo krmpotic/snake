@@ -41,8 +41,8 @@ void draw_snake()
 	int i;
 	mvaddch(S.y[S.ihead], S.x[S.ihead], CH_HEAD);
 	for (i = 1; i < S.len && i < MAX_LEN; ++i)
-		mvaddch(S.y[(MAX_LEN + S.ihead - i) % MAX_LEN],
-		        S.x[(MAX_LEN + S.ihead - i) % MAX_LEN],
+		mvaddch(S.y[rel_ind(-i)],
+		        S.x[rel_ind(-i)],
 		        CH_BODY);
 }
 
