@@ -57,6 +57,7 @@ int main()
 	int row, col;
 
 	initscr();
+	keypad(stdscr, TRUE);
 	curs_set(0);
 
 	getmaxyx(stdscr,row,col);
