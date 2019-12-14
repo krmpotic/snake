@@ -90,6 +90,22 @@ void mv_snake(enum dir dir)
 	S.x[S.ihead] = x;
 }
 
+int check_crash(int height, int width)
+{
+	int i;
+	if (S.x[S.ihead] < 1 || S.x[S.ihead] >= width - 1)
+		return 1;
+	if (S.y[S.ihead] < 1 || S.y[S.ihead] >= height - 1)
+		return 1;
+
+	for (i = 1; i < S.len; ++i)
+		if (S.x[rel_ind(0)] == S.x[rel_ind(-i)] &&
+		    S.y[rel_ind(0)] == S.y[rel_ind(-i)]) {
+			return 1;
+		}
+	return 0;
+}
+
 int main()
 {
 	int ch;
@@ -125,6 +141,8 @@ int main()
 		}
 
 		mv_snake(dir);
+		if (check_crash(row-2, col-2))
+			break;
 		clear();
 		refresh();
 		wclear(sandbox);
