@@ -6,10 +6,11 @@
 #define CH_HEAD '@'
 #define CH_FOOD 'x'
 #define MAX_LEN 1000
-#define START_LEN 50
+#define START_LEN 10
 #define MIN_ROW 20
 #define MIN_COL 20
 #define rel_ind(r) ((MAX_LEN + S.ihead + (r)) % MAX_LEN)
+
 enum dir { UP, DOWN, RIGHT, LEFT };
 
 struct point {
@@ -23,6 +24,8 @@ struct snake {
 	int x[MAX_LEN];
 	int y[MAX_LEN];
 } S;
+
+WINDOW *sandbox;
 
 void init_snake(int row, int col)
 {
@@ -39,9 +42,10 @@ void init_snake(int row, int col)
 void draw_snake()
 {
 	int i;
-	mvaddch(S.y[S.ihead], S.x[S.ihead], CH_HEAD);
+	mvwaddch(sandbox, S.y[S.ihead], S.x[S.ihead], CH_HEAD);
 	for (i = 1; i < S.len && i < MAX_LEN; ++i)
-		mvaddch(S.y[rel_ind(-i)],
+		mvwaddch(sandbox,
+		        S.y[rel_ind(-i)],
 		        S.x[rel_ind(-i)],
 		        CH_BODY);
 }
@@ -92,6 +96,7 @@ int main()
 	int row, col;
 
 	initscr();
+	cbreak();
 	keypad(stdscr, TRUE);
 	curs_set(0);
 
@@ -103,9 +108,12 @@ int main()
 	}
 
 	init_snake(row, col);
-	clear();
-	draw_snake();
+
 	refresh();
+	sandbox = newwin(row-2, col-2, 1, 1);
+	draw_snake();
+	box(sandbox, 0, 0);
+	wrefresh(sandbox);
 
 	while ((ch = getch()) != 'q') {
 		switch(ch) {
@@ -117,10 +125,14 @@ int main()
 
 		mv_snake(dir);
 		clear();
-		draw_snake();
 		refresh();
+		wclear(sandbox);
+		draw_snake();
+        	box(sandbox, 0, 0);
+		wrefresh(sandbox);
 	}
 
+	delwin(sandbox);
 	endwin();
 	return 0;
 }
