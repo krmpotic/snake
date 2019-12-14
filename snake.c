@@ -26,11 +26,11 @@ struct snake {
 
 void init_snake(int row, int col)
 {
-	row = (row - START_LEN) / 2;
-	col /= 2;
+	col = (col - START_LEN) / 2;
+	row /= 2;
 	for (S.ihead = 0; S.ihead < START_LEN; ++S.ihead) {
-		S.x[S.ihead] = row + S.ihead;
-		S.y[S.ihead] = col;
+		S.x[S.ihead] = col + S.ihead;
+		S.y[S.ihead] = row;
 	}
 	--S.ihead;
 	S.len = START_LEN;
