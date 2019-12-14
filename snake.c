@@ -85,8 +85,9 @@ void mv_snake(enum dir dir)
 	}
 
 	++S.ihead;
-	S.y[rel_ind(0)] = y;
-	S.x[rel_ind(0)] = x;
+	S.ihead = rel_ind(0);
+	S.y[S.ihead] = y;
+	S.x[S.ihead] = x;
 }
 
 int main()
