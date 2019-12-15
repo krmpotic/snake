@@ -15,10 +15,10 @@
 
 enum dir { UP, DOWN, RIGHT, LEFT };
 
-struct point {
+struct food {
 	int y;
 	int x;
-};
+} F;
 
 struct snake {
 	int len;
@@ -50,6 +50,33 @@ void draw_snake()
 		        S.y[rel_ind(-i)],
 		        S.x[rel_ind(-i)],
 		        CH_BODY);
+}
+
+void rand_food(int height, int width)
+{
+	int f, i;
+	F.x = rand() % width + 1;
+	F.y = rand() % height + 1;
+
+	do {
+		f = 0;
+		F.x = ++F.x % width;
+		if (F.x == 0) {
+			++F.x;
+			F.y = ++F.y % height;
+			if (F.y == 0)
+				++F.y;
+		}
+		for (i = 0; i < S.len; ++i)
+			if (S.x[rel_ind(-i)] == F.x &&
+			    S.y[rel_ind(-i)] == F.y)
+				f = 1;
+	} while (f);
+}
+
+void draw_food()
+{
+	mvwaddch(sandbox, F.y, F.x, CH_FOOD);
 }
 
 void mv_snake(enum dir dir)
@@ -114,6 +141,8 @@ int main()
 	enum dir dir;
 	int row, col;
 	struct timespec slp = { .tv_sec = 0, .tv_nsec = SLEEP_NS };
+	time_t t; /* only for srand */
+	srand((unsigned) time(&t));
 
 	initscr();
 	timeout(0);
@@ -135,6 +164,8 @@ int main()
 	refresh();
 	sandbox = newwin(row-2, col-2, 1, 1);
 	draw_snake();
+	rand_food(row-2, col-2);
+	draw_food();
 	box(sandbox, 0, 0);
 	wrefresh(sandbox);
 
@@ -151,8 +182,14 @@ int main()
 		if (check_crash(row-2, col-2))
 			break;
 		werase(sandbox);
+		draw_food();
 		draw_snake();
-        	box(sandbox, 0, 0);
+		if (S.x[S.ihead] == F.x && S.y[S.ihead] == F.y) {
+			++S.len;
+			rand_food(row-2, col-2);
+			draw_food();
+		}
+		box(sandbox, 0, 0);
 		wrefresh(sandbox);
 	}
 
