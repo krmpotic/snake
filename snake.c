@@ -1,6 +1,7 @@
 #include <ncurses.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #define CH_BODY '*'
 #define CH_HEAD '@'
@@ -9,6 +10,7 @@
 #define START_LEN 10
 #define MIN_ROW 20
 #define MIN_COL 20
+#define SLEEP_NS 5e7
 #define rel_ind(r) ((MAX_LEN + S.ihead + (r)) % MAX_LEN)
 
 enum dir { UP, DOWN, RIGHT, LEFT };
@@ -111,8 +113,11 @@ int main()
 	int ch;
 	enum dir dir;
 	int row, col;
+	struct timespec slp = { .tv_sec = 0, .tv_nsec = SLEEP_NS };
 
 	initscr();
+	timeout(0);
+	noecho();
 	cbreak();
 	keypad(stdscr, TRUE);
 	curs_set(0);
@@ -125,6 +130,7 @@ int main()
 	}
 
 	init_snake(row, col);
+	dir = RIGHT;
 
 	refresh();
 	sandbox = newwin(row-2, col-2, 1, 1);
@@ -133,6 +139,7 @@ int main()
 	wrefresh(sandbox);
 
 	while ((ch = getch()) != 'q') {
+		nanosleep(&slp, NULL);
 		switch(ch) {
 		case 'W': case 'w': case KEY_UP   : dir = UP   ; break;
 		case 'A': case 'a': case KEY_LEFT : dir = LEFT ; break;
@@ -143,9 +150,7 @@ int main()
 		mv_snake(dir);
 		if (check_crash(row-2, col-2))
 			break;
-		clear();
-		refresh();
-		wclear(sandbox);
+		werase(sandbox);
 		draw_snake();
         	box(sandbox, 0, 0);
 		wrefresh(sandbox);
