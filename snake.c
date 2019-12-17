@@ -54,24 +54,23 @@ void draw_snake()
 
 void rand_food(int height, int width)
 {
+#define BOX_ADJ 1
 	int f, i;
-	F.x = rand() % width + 1;
-	F.y = rand() % height + 1;
+	F.x = rand() % (width  - 2*BOX_ADJ);
+	F.y = rand() % (height - 2*BOX_ADJ);
 
 	do {
 		f = 0;
-		F.x = ++F.x % width;
-		if (F.x == 0) {
-			++F.x;
-			F.y = ++F.y % height;
-			if (F.y == 0)
-				++F.y;
-		}
+		F.x = ++F.x % (width  - 2*BOX_ADJ);
+		F.y = ++F.y % (height - 2*BOX_ADJ);
 		for (i = 0; i < S.len; ++i)
-			if (S.x[rel_ind(-i)] == F.x &&
-			    S.y[rel_ind(-i)] == F.y)
+			if (S.x[rel_ind(-i)] == F.x + BOX_ADJ &&
+			    S.y[rel_ind(-i)] == F.y + BOX_ADJ)
 				f = 1;
 	} while (f);
+
+	F.x += BOX_ADJ;
+	F.y += BOX_ADJ;
 }
 
 void draw_food()
