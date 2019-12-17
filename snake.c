@@ -48,10 +48,7 @@ void draw_snake()
 	int i;
 	mvwaddch(sandbox, S.y[S.ihead], S.x[S.ihead], CH_HEAD);
 	for (i = 1; i < S.len && i < MAX_LEN; ++i)
-		mvwaddch(sandbox,
-		        S.y[rel_ind(-i)],
-		        S.x[rel_ind(-i)],
-		        CH_BODY);
+		mvwaddch(sandbox, S.y[rel_ind(-i)], S.x[rel_ind(-i)], CH_BODY);
 }
 
 void rand_food(int height, int width)
@@ -184,5 +181,3 @@ int main()
 	endwin();
 	return 0;
 }
-
-
