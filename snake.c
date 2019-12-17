@@ -86,7 +86,6 @@ void mv_snake(enum dir dir)
 	int x = S.x[S.ihead];
 
 	/* prevent movement inside oneself */
-	if (S.len > 1) {
 		if      (dir == LEFT  && S.dir == RIGHT)
 			S.dir = RIGHT;
 		else if (dir == RIGHT && S.dir == LEFT)
@@ -95,7 +94,8 @@ void mv_snake(enum dir dir)
 			S.dir = DOWN;
 		else if (dir == DOWN  && S.dir == UP)
 			S.dir = UP;
-	}
+		else
+			S.dir = dir;
 
 	switch(S.dir) {
 	case UP   : --y; break;
