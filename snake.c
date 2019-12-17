@@ -11,7 +11,7 @@
 #define MIN_ROW 20
 #define MIN_COL 20
 #define SLEEP_NS 5e7
-#define rel_ind(r) ((MAX_LEN + S.ihead + (r)) % MAX_LEN)
+#define TAIL(r) ((MAX_LEN + S.ihead + -1 * (r)) % MAX_LEN)
 
 enum dir { UP, DOWN, RIGHT, LEFT };
 
@@ -48,7 +48,7 @@ void draw_snake()
 	int i;
 	mvwaddch(sandbox, S.y[S.ihead], S.x[S.ihead], CH_HEAD);
 	for (i = 1; i < S.len && i < MAX_LEN; ++i)
-		mvwaddch(sandbox, S.y[rel_ind(-i)], S.x[rel_ind(-i)], CH_BODY);
+		mvwaddch(sandbox, S.y[TAIL(i)], S.x[TAIL(i)], CH_BODY);
 }
 
 void rand_food(int height, int width)
@@ -63,8 +63,8 @@ void rand_food(int height, int width)
 		F.x = ++F.x % (width  - 2*BOX_ADJ);
 		F.y = ++F.y % (height - 2*BOX_ADJ);
 		for (i = 0; i < S.len; ++i)
-			if (S.x[rel_ind(-i)] == F.x + BOX_ADJ &&
-			    S.y[rel_ind(-i)] == F.y + BOX_ADJ)
+			if (S.x[TAIL(i)] == F.x + BOX_ADJ &&
+			    S.y[TAIL(i)] == F.y + BOX_ADJ)
 				f = 1;
 	} while (f);
 
@@ -99,7 +99,7 @@ void mv_snake(enum dir dir)
 	}
 
 	++S.ihead;
-	S.ihead = rel_ind(0);
+	S.ihead = TAIL(0);
 	S.y[S.ihead] = y;
 	S.x[S.ihead] = x;
 }
@@ -113,8 +113,8 @@ int check_crash(int height, int width)
 		return 1;
 
 	for (i = 1; i < S.len; ++i)
-		if (S.x[rel_ind(0)] == S.x[rel_ind(-i)] &&
-		    S.y[rel_ind(0)] == S.y[rel_ind(-i)]) {
+		if (S.x[TAIL(0)] == S.x[TAIL(i)] &&
+		    S.y[TAIL(0)] == S.y[TAIL(i)]) {
 			return 1;
 		}
 	return 0;
