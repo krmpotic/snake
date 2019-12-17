@@ -173,13 +173,12 @@ int main()
 		if (check_crash(row-2, col-2))
 			break;
 		werase(sandbox);
-		draw_food();
 		draw_snake();
 		if (S.x[S.ihead] == F.x && S.y[S.ihead] == F.y) {
 			++S.len;
 			rand_food(row-2, col-2);
-			draw_food();
 		}
+		draw_food();
 		box(sandbox, 0, 0);
 		wrefresh(sandbox);
 	}
