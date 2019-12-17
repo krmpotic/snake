@@ -167,11 +167,13 @@ int main()
 		if (check_crash(row-2, col-2))
 			break;
 		werase(sandbox);
-		draw_snake();
 		if (S.x[S.ihead] == F.x && S.y[S.ihead] == F.y) {
 			++S.len;
+			if (S.len == MAX_LEN)
+				break;
 			rand_food(row-2, col-2);
 		}
+		draw_snake();
 		draw_food();
 		box(sandbox, 0, 0);
 		wrefresh(sandbox);
@@ -179,5 +181,8 @@ int main()
 
 	delwin(sandbox);
 	endwin();
+
+	if (S.len == MAX_LEN)
+		printf("You won!\n");
 	return 0;
 }
