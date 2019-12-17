@@ -23,6 +23,7 @@ struct food {
 struct snake {
 	int len;
 	int ihead;
+	enum dir dir;
 	int x[MAX_LEN];
 	int y[MAX_LEN];
 } S;
@@ -39,6 +40,7 @@ void init_snake(int row, int col)
 	}
 	--S.ihead;
 	S.len = START_LEN;
+	S.dir = RIGHT;
 }
 
 void draw_snake()
@@ -85,27 +87,17 @@ void mv_snake(enum dir dir)
 
 	/* prevent movement inside oneself */
 	if (S.len > 1) {
-		enum dir prev;
-		if      (S.x[S.ihead] - S.x[rel_ind(-1)] == 1)
-			prev = RIGHT;
-		else if (S.x[S.ihead] - S.x[rel_ind(-1)] == -1)
-			prev = LEFT;
-		else if (S.y[S.ihead] - S.y[rel_ind(-1)] == 1)
-			prev = DOWN;
-		else
-			prev = UP;
-
-		if      (dir == LEFT  && prev == RIGHT)
-			dir = RIGHT;
-		else if (dir == RIGHT && prev == LEFT)
-			dir = LEFT;
-		else if (dir == UP    && prev == DOWN)
-			dir = DOWN;
-		else if (dir == DOWN  && prev == UP)
-			dir = UP;
+		if      (dir == LEFT  && S.dir == RIGHT)
+			S.dir = RIGHT;
+		else if (dir == RIGHT && S.dir == LEFT)
+			S.dir = LEFT;
+		else if (dir == UP    && S.dir == DOWN)
+			S.dir = DOWN;
+		else if (dir == DOWN  && S.dir == UP)
+			S.dir = UP;
 	}
 
-	switch(dir) {
+	switch(S.dir) {
 	case UP   : --y; break;
 	case LEFT : --x; break;
 	case DOWN : ++y; break;
@@ -137,7 +129,6 @@ int check_crash(int height, int width)
 int main()
 {
 	int ch;
-	enum dir dir;
 	int row, col;
 	struct timespec slp = { .tv_sec = 0, .tv_nsec = SLEEP_NS };
 	time_t t; /* only for srand */
@@ -158,7 +149,6 @@ int main()
 	}
 
 	init_snake(row, col);
-	dir = RIGHT;
 
 	refresh();
 	sandbox = newwin(row-2, col-2, 1, 1);
@@ -170,14 +160,16 @@ int main()
 
 	while ((ch = getch()) != 'q') {
 		nanosleep(&slp, NULL);
+
+		enum dir dir = S.dir;
 		switch(ch) {
 		case 'W': case 'w': case KEY_UP   : dir = UP   ; break;
 		case 'A': case 'a': case KEY_LEFT : dir = LEFT ; break;
 		case 'S': case 's': case KEY_DOWN : dir = DOWN ; break;
 		case 'D': case 'd': case KEY_RIGHT: dir = RIGHT; break;
 		}
-
 		mv_snake(dir);
+
 		if (check_crash(row-2, col-2))
 			break;
 		werase(sandbox);
