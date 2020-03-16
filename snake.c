@@ -160,13 +160,14 @@ int main()
 
 		if (check_crash(row, col))
 			break;
-		erase();
 		if (S.x[S.ihead] == F.x && S.y[S.ihead] == F.y) {
 			++S.len;
 			if (S.len == MAX_LEN)
 				break;
 			rand_food(row, col);
 		}
+
+		erase();
 		draw_snake();
 		draw_food();
 		refresh();
