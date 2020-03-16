@@ -139,15 +139,10 @@ int main()
 		exit(1);
 	}
 
-	init_snake(row, col);
-
-	refresh();
 	sandbox = newwin(row-2, col-2, 1, 1);
-	draw_snake();
+
+	init_snake(row, col);
 	rand_food(row-2, col-2);
-	draw_food();
-	box(sandbox, 0, 0);
-	wrefresh(sandbox);
 
 	while ((ch = getch()) != 'q') {
 		enum dir dir = S.dir;
