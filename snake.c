@@ -13,7 +13,9 @@
 #define SLEEP_NS 5e7
 #define TAIL(r) ((MAX_LEN + S.ihead + -1 * (r)) % MAX_LEN)
 
-enum dir { UP, DOWN, RIGHT, LEFT };
+enum dir { UP, RIGHT, DOWN, LEFT };
+#define IS_OPPOSITE(d1,d2) ((4+(d1)-(d2))%4==2)
+
 
 struct food {
 	int y;
@@ -83,12 +85,7 @@ void mv_snake(enum dir dir)
 	int x = S.x[S.ihead];
 
 	/* prevent movement inside oneself */
-	if ((dir == LEFT  && S.dir == RIGHT) ||
-	    (dir == RIGHT && S.dir == LEFT ) ||
-	    (dir == UP    && S.dir == DOWN ) ||
-	    (dir == DOWN  && S.dir == UP   ))
-		;
-	else
+	if (!IS_OPPOSITE(dir,S.dir))
 		S.dir = dir;
 
 	switch(S.dir) {
