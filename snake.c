@@ -128,8 +128,7 @@ int main()
 	int ch;
 	int row, col;
 	struct timespec slp = { .tv_sec = 0, .tv_nsec = SLEEP_NS };
-	time_t t; /* only for srand */
-	srand((unsigned) time(&t));
+	srand((unsigned) time(NULL));
 
 	initscr();
 	timeout(0);
