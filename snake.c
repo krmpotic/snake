@@ -88,9 +88,8 @@ mv_snake(enum dir dir)
 int
 check_crash(int height, int width)
 {
-	if (S.x[S.ihead] < 0 || S.x[S.ihead] >= width)
-		return 1;
-	if (S.y[S.ihead] < 0 || S.y[S.ihead] >= height)
+	if (S.x[S.ihead] < 0 || S.x[S.ihead] >= width ||
+	    S.y[S.ihead] < 0 || S.y[S.ihead] >= height)
 		return 1;
 
 	return is_inside_snake(S.y[S.ihead], S.x[S.ihead]);
