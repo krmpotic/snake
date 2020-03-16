@@ -113,7 +113,8 @@ rand_food(int height, int width)
 
 	do {
 		F.x = ++F.x % width;
-		F.y = ++F.y % height;
+		if (F.x == 0)
+			F.y == ++F.y % height;
 	} while (is_inside_snake(F.y,F.x));
 }
 
