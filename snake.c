@@ -30,7 +30,15 @@ struct snake {
 	int y[MAX_LEN];
 } S;
 
-void init_snake(int row, int col)
+void init_snake(int row, int col);
+void draw_snake(void);
+void rand_food(int height, int width);
+void draw_food(void);
+void mv_snake(enum dir dir);
+int check_crash(int height, int width);
+
+void
+init_snake(int row, int col)
 {
 	col = (col - START_LEN) / 2;
 	row /= 2;
@@ -43,7 +51,8 @@ void init_snake(int row, int col)
 	S.dir = RIGHT;
 }
 
-void draw_snake()
+void
+draw_snake(void)
 {
 	int i;
 	mvaddch(S.y[S.ihead], S.x[S.ihead], CH_HEAD);
@@ -51,7 +60,8 @@ void draw_snake()
 		mvaddch(S.y[TAIL(i)], S.x[TAIL(i)], CH_BODY);
 }
 
-void rand_food(int height, int width)
+void
+rand_food(int height, int width)
 {
 	int f, i;
 	F.x = rand() % width;
@@ -67,12 +77,14 @@ void rand_food(int height, int width)
 	} while (f);
 }
 
-void draw_food()
+void
+draw_food(void)
 {
 	mvaddch(F.y, F.x, CH_FOOD);
 }
 
-void mv_snake(enum dir dir)
+void
+mv_snake(enum dir dir)
 {
 	int y = S.y[S.ihead];
 	int x = S.x[S.ihead];
@@ -94,7 +106,8 @@ void mv_snake(enum dir dir)
 	S.x[S.ihead] = x;
 }
 
-int check_crash(int height, int width)
+int
+check_crash(int height, int width)
 {
 	int i;
 	if (S.x[S.ihead] < 0 || S.x[S.ihead] >= width)
