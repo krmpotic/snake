@@ -30,12 +30,23 @@ struct snake {
 	int y[MAX_LEN];
 } S;
 
+int is_inside_snake(int y, int x);
 void init_snake(int height, int width);
 void mv_snake(enum dir dir);
 int check_crash(int height, int width);
 void draw_snake(void);
 void rand_food(int height, int width);
 void draw_food(void);
+
+int is_inside_snake(int y, int x)
+{
+	int i;
+	for (i = 1; i < S.len; ++i)
+		if (S.x[x] == S.x[TAIL(i)] &&
+		    S.y[y] == S.y[TAIL(i)])
+			return 1;
+	return 0;
+}
 
 void
 init_snake(int height, int width)
@@ -77,18 +88,12 @@ mv_snake(enum dir dir)
 int
 check_crash(int height, int width)
 {
-	int i;
 	if (S.x[S.ihead] < 0 || S.x[S.ihead] >= width)
 		return 1;
 	if (S.y[S.ihead] < 0 || S.y[S.ihead] >= height)
 		return 1;
 
-	for (i = 1; i < S.len; ++i)
-		if (S.x[TAIL(0)] == S.x[TAIL(i)] &&
-		    S.y[TAIL(0)] == S.y[TAIL(i)]) {
-			return 1;
-		}
-	return 0;
+	return is_inside_snake(S.y[S.ihead], S.x[S.ihead]);
 }
 
 void
@@ -103,18 +108,13 @@ draw_snake(void)
 void
 rand_food(int height, int width)
 {
-	int f, i;
 	F.x = rand() % width;
 	F.y = rand() % height;
 
 	do {
-		f = 0;
 		F.x = ++F.x % width;
 		F.y = ++F.y % height;
-		for (i = 0; i < S.len; ++i)
-			if (S.x[TAIL(i)] == F.x && S.y[TAIL(i)] == F.y)
-				f = 1;
-	} while (f);
+	} while (is_inside_snake(F.y,F.x));
 }
 
 void
