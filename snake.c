@@ -100,7 +100,7 @@ draw_snake(void)
 {
 	int i;
 	mvaddch(S.y[S.ihead], S.x[S.ihead], CH_HEAD);
-	for (i = 1; i < S.len && i < MAX_LEN; ++i)
+	for (i = 1; i < S.len; ++i)
 		mvaddch(S.y[TAIL(i)], S.x[TAIL(i)], CH_BODY);
 }
 
