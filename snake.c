@@ -30,7 +30,7 @@ struct snake {
 	int y[MAX_LEN];
 } S;
 
-void init_snake(int row, int col);
+void init_snake(int height, int width);
 void mv_snake(enum dir dir);
 int check_crash(int height, int width);
 void draw_snake(void);
@@ -38,13 +38,13 @@ void rand_food(int height, int width);
 void draw_food(void);
 
 void
-init_snake(int row, int col)
+init_snake(int height, int width)
 {
-	col = (col - START_LEN) / 2;
-	row /= 2;
+	width = (width - START_LEN) / 2;
+	height /= 2;
 	for (S.ihead = 0; S.ihead < START_LEN; ++S.ihead) {
-		S.x[S.ihead] = col + S.ihead;
-		S.y[S.ihead] = row;
+		S.x[S.ihead] = width + S.ihead;
+		S.y[S.ihead] = height;
 	}
 	--S.ihead;
 	S.len = START_LEN;
