@@ -16,6 +16,7 @@
 enum dir { UP, RIGHT, DOWN, LEFT };
 #define IS_OPPOSITE(d1,d2) ((4+(d1)-(d2))%4==2)
 
+int row, col;
 
 struct food {
 	int y;
@@ -31,11 +32,11 @@ struct snake {
 } S;
 
 int is_inside_snake(int y, int x);
-void init_snake(int height, int width);
+void init_snake(void);
 void mv_snake(enum dir dir);
-int check_crash(int height, int width);
+int check_crash(void);
 void draw_snake(void);
-void rand_food(int height, int width);
+void rand_food(void);
 void draw_food(void);
 
 int is_inside_snake(int y, int x)
@@ -49,13 +50,13 @@ int is_inside_snake(int y, int x)
 }
 
 void
-init_snake(int height, int width)
+init_snake(void)
 {
-	width = (width - START_LEN) / 2;
-	height /= 2;
+	int x = (col - START_LEN) / 2;
+	int y = row / 2;
 	for (S.ihead = 0; S.ihead < START_LEN; ++S.ihead) {
-		S.x[S.ihead] = width + S.ihead;
-		S.y[S.ihead] = height;
+		S.x[S.ihead] = x + S.ihead;
+		S.y[S.ihead] = y;
 	}
 	--S.ihead;
 	S.len = START_LEN;
@@ -86,10 +87,10 @@ mv_snake(enum dir dir)
 }
 
 int
-check_crash(int height, int width)
+check_crash(void)
 {
-	if (S.x[S.ihead] < 0 || S.x[S.ihead] >= width ||
-	    S.y[S.ihead] < 0 || S.y[S.ihead] >= height)
+	if (S.x[S.ihead] < 0 || S.x[S.ihead] >= col ||
+	    S.y[S.ihead] < 0 || S.y[S.ihead] >= row)
 		return 1;
 
 	return is_inside_snake(S.y[S.ihead], S.x[S.ihead]);
@@ -105,15 +106,15 @@ draw_snake(void)
 }
 
 void
-rand_food(int height, int width)
+rand_food(void)
 {
-	F.x = rand() % width;
-	F.y = rand() % height;
+	F.x = rand() % col;
+	F.y = rand() % row;
 
 	do {
-		F.x = ++F.x % width;
+		F.x = ++F.x % col;
 		if (F.x == 0)
-			F.y == ++F.y % height;
+			F.y == ++F.y % row;
 	} while (is_inside_snake(F.y,F.x));
 }
 
@@ -126,7 +127,6 @@ draw_food(void)
 int main()
 {
 	int ch;
-	int row, col;
 	struct timespec slp = { .tv_sec = 0, .tv_nsec = SLEEP_NS };
 	srand((unsigned) time(NULL));
 
@@ -144,8 +144,8 @@ int main()
 		exit(1);
 	}
 
-	init_snake(row, col);
-	rand_food(row, col);
+	init_snake();
+	rand_food();
 
 	while ((ch = getch()) != 'q') {
 		enum dir dir = S.dir;
@@ -158,12 +158,12 @@ int main()
 		}
 		mv_snake(dir);
 
-		if (check_crash(row, col))
+		if (check_crash())
 			break;
 		if (S.x[S.ihead] == F.x && S.y[S.ihead] == F.y) {
 			if (++S.len == MAX_LEN)
 				break;
-			rand_food(row, col);
+			rand_food();
 		}
 
 		erase();
