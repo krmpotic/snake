@@ -30,8 +30,6 @@ struct snake {
 	int y[MAX_LEN];
 } S;
 
-WINDOW *sandbox;
-
 void init_snake(int row, int col)
 {
 	col = (col - START_LEN) / 2;
@@ -48,35 +46,30 @@ void init_snake(int row, int col)
 void draw_snake()
 {
 	int i;
-	mvwaddch(sandbox, S.y[S.ihead], S.x[S.ihead], CH_HEAD);
+	mvaddch(S.y[S.ihead], S.x[S.ihead], CH_HEAD);
 	for (i = 1; i < S.len && i < MAX_LEN; ++i)
-		mvwaddch(sandbox, S.y[TAIL(i)], S.x[TAIL(i)], CH_BODY);
+		mvaddch(S.y[TAIL(i)], S.x[TAIL(i)], CH_BODY);
 }
 
 void rand_food(int height, int width)
 {
-#define BOX_ADJ 1
 	int f, i;
-	F.x = rand() % (width  - 2*BOX_ADJ);
-	F.y = rand() % (height - 2*BOX_ADJ);
+	F.x = rand() % width;
+	F.y = rand() % height;
 
 	do {
 		f = 0;
-		F.x = ++F.x % (width  - 2*BOX_ADJ);
-		F.y = ++F.y % (height - 2*BOX_ADJ);
+		F.x = ++F.x % width;
+		F.y = ++F.y % height;
 		for (i = 0; i < S.len; ++i)
-			if (S.x[TAIL(i)] == F.x + BOX_ADJ &&
-			    S.y[TAIL(i)] == F.y + BOX_ADJ)
+			if (S.x[TAIL(i)] == F.x && S.y[TAIL(i)] == F.y)
 				f = 1;
 	} while (f);
-
-	F.x += BOX_ADJ;
-	F.y += BOX_ADJ;
 }
 
 void draw_food()
 {
-	mvwaddch(sandbox, F.y, F.x, CH_FOOD);
+	mvaddch(F.y, F.x, CH_FOOD);
 }
 
 void mv_snake(enum dir dir)
@@ -104,9 +97,9 @@ void mv_snake(enum dir dir)
 int check_crash(int height, int width)
 {
 	int i;
-	if (S.x[S.ihead] < 1 || S.x[S.ihead] >= width - 1)
+	if (S.x[S.ihead] < 0 || S.x[S.ihead] >= width)
 		return 1;
-	if (S.y[S.ihead] < 1 || S.y[S.ihead] >= height - 1)
+	if (S.y[S.ihead] < 0 || S.y[S.ihead] >= height)
 		return 1;
 
 	for (i = 1; i < S.len; ++i)
@@ -139,10 +132,8 @@ int main()
 		exit(1);
 	}
 
-	sandbox = newwin(row-2, col-2, 1, 1);
-
 	init_snake(row, col);
-	rand_food(row-2, col-2);
+	rand_food(row, col);
 
 	while ((ch = getch()) != 'q') {
 		enum dir dir = S.dir;
@@ -155,24 +146,22 @@ int main()
 		}
 		mv_snake(dir);
 
-		if (check_crash(row-2, col-2))
+		if (check_crash(row, col))
 			break;
-		werase(sandbox);
+		erase();
 		if (S.x[S.ihead] == F.x && S.y[S.ihead] == F.y) {
 			++S.len;
 			if (S.len == MAX_LEN)
 				break;
-			rand_food(row-2, col-2);
+			rand_food(row, col);
 		}
 		draw_snake();
 		draw_food();
-		box(sandbox, 0, 0);
-		wrefresh(sandbox);
+		refresh();
 
 		nanosleep(&slp, NULL);
 	}
 
-	delwin(sandbox);
 	endwin();
 
 	if (S.len == MAX_LEN)
