@@ -153,9 +153,8 @@ int main()
 	wrefresh(sandbox);
 
 	while ((ch = getch()) != 'q') {
-		nanosleep(&slp, NULL);
-
 		enum dir dir = S.dir;
+
 		switch(ch) {
 		case 'W': case 'w': case KEY_UP   : dir = UP   ; break;
 		case 'A': case 'a': case KEY_LEFT : dir = LEFT ; break;
@@ -177,6 +176,8 @@ int main()
 		draw_food();
 		box(sandbox, 0, 0);
 		wrefresh(sandbox);
+
+		nanosleep(&slp, NULL);
 	}
 
 	delwin(sandbox);
