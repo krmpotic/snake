@@ -43,8 +43,8 @@ int is_inside_snake(int y, int x)
 {
 	int i;
 	for (i = 1; i < S.len; ++i)
-		if (S.x[x] == S.x[TAIL(i)] &&
-		    S.y[y] == S.y[TAIL(i)])
+		if (x == S.x[TAIL(i)] &&
+		    y == S.y[TAIL(i)])
 			return 1;
 	return 0;
 }
@@ -152,10 +152,10 @@ int main()
 		enum dir dir = S.dir;
 
 		switch(ch) {
-		case 'W': case 'w': case KEY_UP   : dir = UP   ; break;
-		case 'A': case 'a': case KEY_LEFT : dir = LEFT ; break;
-		case 'S': case 's': case KEY_DOWN : dir = DOWN ; break;
-		case 'D': case 'd': case KEY_RIGHT: dir = RIGHT; break;
+		case 'w': case KEY_UP   : dir = UP   ; break;
+		case 'a': case KEY_LEFT : dir = LEFT ; break;
+		case 's': case KEY_DOWN : dir = DOWN ; break;
+		case 'd': case KEY_RIGHT: dir = RIGHT; break;
 		}
 		mv_snake(dir);
 
