@@ -52,13 +52,14 @@ int is_inside_snake(int y, int x)
 void
 init_snake(void)
 {
+	int i;
 	int x = (col - START_LEN) / 2;
 	int y = row / 2;
-	for (S.ihead = 0; S.ihead < START_LEN; ++S.ihead) {
-		S.x[S.ihead] = x + S.ihead;
-		S.y[S.ihead] = y;
+	for (i = 0; i < START_LEN; ++i) {
+		S.x[i] = x + i;
+		S.y[i] = y;
 	}
-	--S.ihead;
+	S.ihead = i-1;
 	S.len = START_LEN;
 	S.dir = RIGHT;
 }
