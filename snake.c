@@ -37,6 +37,7 @@ void mv_snake(enum dir dir);
 int check_crash(void);
 void draw_snake(void);
 void rand_food(void);
+int check_food(void);
 void draw_food(void);
 
 int is_inside_snake(int y, int x)
@@ -119,6 +120,11 @@ rand_food(void)
 	} while (is_inside_snake(F.y,F.x));
 }
 
+int check_food(void)
+{
+	return S.x[S.ihead] == F.x && S.y[S.ihead] == F.y;
+}
+
 void
 draw_food(void)
 {
@@ -161,7 +167,7 @@ int main()
 
 		if (check_crash())
 			break;
-		if (S.x[S.ihead] == F.x && S.y[S.ihead] == F.y) {
+		if (check_food()) {
 			if (++S.len == MAX_LEN)
 				break;
 			rand_food();
