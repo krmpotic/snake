@@ -11,10 +11,10 @@
 #define MIN_ROW 20
 #define MIN_COL 20
 #define SLEEP_NS 5e7
-#define TAIL(r) ((MAX_LEN + S.ihead + -1 * (r)) % MAX_LEN)
 
-enum dir { UP = -1, RIGHT = -2, DOWN = 1, LEFT = 2 };
+#define TAIL(r) ((MAX_LEN + S.ihead + -1 * (r)) % MAX_LEN)
 #define IS_OPPOSITE(d1,d2) (-(d1)==(d2))
+enum dir { UP = -1, RIGHT = -2, DOWN = 1, LEFT = 2 };
 
 int row, col;
 
