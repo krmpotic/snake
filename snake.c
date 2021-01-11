@@ -13,8 +13,8 @@
 #define SLEEP_NS 5e7
 #define TAIL(r) ((MAX_LEN + S.ihead + -1 * (r)) % MAX_LEN)
 
-enum dir { UP, RIGHT, DOWN, LEFT };
-#define IS_OPPOSITE(d1,d2) ((4+(d1)-(d2))%4==2)
+enum dir { UP = -1, RIGHT = -2, DOWN = 1, LEFT = 2 };
+#define IS_OPPOSITE(d1,d2) (-(d1)==(d2))
 
 int row, col;
 
