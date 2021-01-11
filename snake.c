@@ -14,7 +14,7 @@
 
 #define TAIL(r) ((MAX_LEN + S.ihead + -1 * (r)) % MAX_LEN)
 #define IS_OPPOSITE(d1,d2) (-(d1)==(d2))
-enum dir { UP = -1, RIGHT = -2, DOWN = 1, LEFT = 2 };
+enum dir { LEFT = -2, DOWN = -1, UP = 1, RIGHT = 2 };
 
 int row, col;
 
