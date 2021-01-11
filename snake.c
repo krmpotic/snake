@@ -44,7 +44,7 @@ int
 is_inside_snake(int y, int x)
 {
 	int i;
-	for (i = 1; i < S.len; ++i)
+	for (i = 1; i < S.len; i++)
 		if (x == S.x[TAIL(i)] &&
 		    y == S.y[TAIL(i)])
 			return 1;
@@ -57,7 +57,7 @@ init_snake()
 	int i;
 	int x = (col - START_LEN) / 2;
 	int y = row / 2;
-	for (i = 0; i < START_LEN; ++i) {
+	for (i = 0; i < START_LEN; i++) {
 		S.x[i] = x + i;
 		S.y[i] = y;
 	}
@@ -77,13 +77,13 @@ mv_snake(enum dir dir)
 		S.dir = dir;
 
 	switch(S.dir) {
-	case UP   : --y; break;
-	case LEFT : --x; break;
-	case DOWN : ++y; break;
-	case RIGHT: ++x; break;
+	case UP   : y--; break;
+	case LEFT : x--; break;
+	case DOWN : y++; break;
+	case RIGHT: x++; break;
 	}
 
-	++S.ihead;
+	S.ihead++;
 	S.ihead = TAIL(0);
 	S.y[S.ihead] = y;
 	S.x[S.ihead] = x;
@@ -104,7 +104,7 @@ draw_snake()
 {
 	int i;
 	mvaddch(S.y[S.ihead], S.x[S.ihead], CH_HEAD);
-	for (i = 1; i < S.len; ++i)
+	for (i = 1; i < S.len; i++)
 		mvaddch(S.y[TAIL(i)], S.x[TAIL(i)], CH_BODY);
 }
 
