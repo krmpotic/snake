@@ -32,13 +32,13 @@ struct snake {
 } S;
 
 int is_inside_snake(int y, int x);
-void init_snake(void);
+void init_snake();
 void mv_snake(enum dir dir);
-int check_crash(void);
-void draw_snake(void);
-void rand_food(void);
-int check_food(void);
-void draw_food(void);
+int check_crash();
+void draw_snake();
+void rand_food();
+int check_food();
+void draw_food();
 
 int
 is_inside_snake(int y, int x)
@@ -52,7 +52,7 @@ is_inside_snake(int y, int x)
 }
 
 void
-init_snake(void)
+init_snake()
 {
 	int i;
 	int x = (col - START_LEN) / 2;
@@ -90,7 +90,7 @@ mv_snake(enum dir dir)
 }
 
 int
-check_crash(void)
+check_crash()
 {
 	if (S.x[S.ihead] < 0 || S.x[S.ihead] >= col ||
 	    S.y[S.ihead] < 0 || S.y[S.ihead] >= row)
@@ -100,7 +100,7 @@ check_crash(void)
 }
 
 void
-draw_snake(void)
+draw_snake()
 {
 	int i;
 	mvaddch(S.y[S.ihead], S.x[S.ihead], CH_HEAD);
@@ -109,7 +109,7 @@ draw_snake(void)
 }
 
 void
-rand_food(void)
+rand_food()
 {
 	F.x = rand() % col;
 	F.y = rand() % row;
@@ -123,13 +123,13 @@ rand_food(void)
 }
 
 int
-check_food(void)
+check_food()
 {
 	return S.x[S.ihead] == F.x && S.y[S.ihead] == F.y;
 }
 
 void
-draw_food(void)
+draw_food()
 {
 	mvaddch(F.y, F.x, CH_FOOD);
 }
