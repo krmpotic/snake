@@ -40,7 +40,8 @@ void rand_food(void);
 int check_food(void);
 void draw_food(void);
 
-int is_inside_snake(int y, int x)
+int
+is_inside_snake(int y, int x)
 {
 	int i;
 	for (i = 1; i < S.len; ++i)
@@ -120,7 +121,8 @@ rand_food(void)
 	} while (is_inside_snake(F.y,F.x));
 }
 
-int check_food(void)
+int
+check_food(void)
 {
 	return S.x[S.ihead] == F.x && S.y[S.ihead] == F.y;
 }
@@ -131,7 +133,8 @@ draw_food(void)
 	mvaddch(F.y, F.x, CH_FOOD);
 }
 
-int main()
+int
+main()
 {
 	int ch;
 	struct timespec slp = { .tv_sec = 0, .tv_nsec = SLEEP_NS };
