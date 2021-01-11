@@ -118,7 +118,8 @@ rand_food(void)
 		F.x = ++F.x % col;
 		if (F.x == 0)
 			F.y == ++F.y % row;
-	} while (is_inside_snake(F.y,F.x));
+	} while (is_inside_snake(F.y,F.x) ||
+	         F.y == S.y[S.ihead] && F.x == S.x[S.ihead]);
 }
 
 int
