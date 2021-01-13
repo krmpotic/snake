@@ -72,8 +72,9 @@ mv_snake(enum dir dir)
 	int y = S.y[S.ihead];
 	int x = S.x[S.ihead];
 
-	/* prevent movement inside oneself */
-	if (!IS_OPPOSITE(dir,S.dir))
+	if (IS_OPPOSITE(dir,S.dir))
+		; /* prevent movement inside oneself */
+	else
 		S.dir = dir;
 
 	switch(S.dir) {
