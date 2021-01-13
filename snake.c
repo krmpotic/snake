@@ -12,7 +12,9 @@
 #define MIN_COL 20
 #define SLEEP_NS 5e7
 
+#define IS_HEAD(_y,_x) ((_y) == S.y[S.ihead] && (_x) == S.x[S.ihead])
 #define TAIL(r) ((MAX_LEN + S.ihead + -1 * (r)) % MAX_LEN)
+
 #define IS_OPPOSITE(d1,d2) (-(d1)==(d2))
 enum dir { LEFT = -2, DOWN = -1, UP = 1, RIGHT = 2 };
 
@@ -118,14 +120,13 @@ rand_food()
 		F.x = ++F.x % col;
 		if (F.x == 0)
 			F.y == ++F.y % row;
-	} while (is_inside_snake(F.y,F.x) ||
-	         F.y == S.y[S.ihead] && F.x == S.x[S.ihead]);
+	} while (is_inside_snake(F.y,F.x) || IS_HEAD(F.y, F.x));
 }
 
 int
 check_food()
 {
-	return S.x[S.ihead] == F.x && S.y[S.ihead] == F.y;
+	return IS_HEAD(F.y,F.x);
 }
 
 void
