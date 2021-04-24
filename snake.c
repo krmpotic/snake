@@ -41,6 +41,7 @@ void draw_snake();
 void rand_food();
 int check_food();
 void draw_food();
+int getch_last();
 
 int
 is_inside_snake(int y, int x)
@@ -136,6 +137,16 @@ draw_food()
 }
 
 int
+getch_last()
+{
+	int b, c;
+	b = ERR;
+	while ((c = getch()) != ERR)
+		b = c;
+	return b;
+}
+
+int
 main()
 {
 	int ch;
@@ -159,7 +170,7 @@ main()
 	init_snake();
 	rand_food();
 
-	while ((ch = getch()) != 'q') {
+	while ((ch = getch_last()) != 'q') {
 		enum dir dir = S.dir;
 
 		switch(ch) {
