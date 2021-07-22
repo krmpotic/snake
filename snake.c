@@ -42,6 +42,7 @@ int getch_last();
 int
 is_inside_snake(int y, int x)
 {
+	/* or should we ask ncurses? */
 	for (int i = 1; i < S.len; i++)
 		if (x == S.x[TAIL(i)] && y == S.y[TAIL(i)])
 			return 1;
@@ -80,7 +81,7 @@ mv_snake(enum dir dir)
 	}
 
 	S.ihead++;
-	S.ihead = TAIL(0);
+	S.ihead = TAIL(0); /* prevent overflow */
 	S.y[S.ihead] = y;
 	S.x[S.ihead] = x;
 }
