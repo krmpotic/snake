@@ -7,9 +7,9 @@
 #define CH_HEAD '@'
 #define CH_FOOD 'x'
 #define MAX_LEN 1000
-#define START_LEN 10
-#define MIN_ROW 20
+#define START_LEN 10 /* < MIN_COL */
 #define MIN_COL 20
+#define MIN_ROW 20
 #define SLEEP_NS 5e7
 
 #define IS_HEAD(_y,_x) ((_y) == S.y[S.ihead] && (_x) == S.x[S.ihead])
@@ -106,8 +106,7 @@ rand_food()
 {
 	F.x = rand() % col;
 	F.y = rand() % row;
-
-	do {
+	do { /* infinite loop if snake fills the whole screen? */
 		F.x = ++F.x % col;
 		if (F.x == 0)
 			F.y == ++F.y % row;
