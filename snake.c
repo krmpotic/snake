@@ -74,8 +74,8 @@ mv_snake(enum dir dir)
 
 	switch(S.dir) {
 	case UP   : y--; break;
-	case LEFT : x--; break;
 	case DOWN : y++; break;
+	case LEFT : x--; break;
 	case RIGHT: x++; break;
 	}
 
