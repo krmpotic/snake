@@ -20,11 +20,7 @@ enum dir { LEFT = -2, DOWN = -1, UP = 1, RIGHT = 2 };
 
 int row, col;
 
-struct food {
-	int y;
-	int x;
-} F;
-
+struct food { int y; int x; } F;
 struct snake {
 	int len;
 	int ihead;
@@ -46,10 +42,8 @@ int getch_last();
 int
 is_inside_snake(int y, int x)
 {
-	int i;
-	for (i = 1; i < S.len; i++)
-		if (x == S.x[TAIL(i)] &&
-		    y == S.y[TAIL(i)])
+	for (int i = 1; i < S.len; i++)
+		if (x == S.x[TAIL(i)] && y == S.y[TAIL(i)])
 			return 1;
 	return 0;
 }
@@ -75,9 +69,7 @@ mv_snake(enum dir dir)
 	int y = S.y[S.ihead];
 	int x = S.x[S.ihead];
 
-	if (IS_OPPOSITE(dir,S.dir))
-		; /* prevent movement inside oneself */
-	else
+	if (!IS_OPPOSITE(dir,S.dir)) /* prevent movement inside oneself */
 		S.dir = dir;
 
 	switch(S.dir) {
@@ -99,15 +91,13 @@ check_crash()
 	if (S.x[S.ihead] < 0 || S.x[S.ihead] >= col ||
 	    S.y[S.ihead] < 0 || S.y[S.ihead] >= row)
 		return 1;
-
 	return is_inside_snake(S.y[S.ihead], S.x[S.ihead]);
 }
 
 void
 draw_snake()
 {
-	int i;
-	for (i = 0; i < S.len; i++)
+	for (int i = 0; i < S.len; i++)
 		mvaddch(S.y[TAIL(i)], S.x[TAIL(i)], (i==0)?CH_HEAD:CH_BODY);
 }
 
@@ -172,7 +162,6 @@ main()
 
 	while ((ch = getch_last()) != 'q') {
 		enum dir dir = S.dir;
-
 		switch(ch) {
 		case 'w': case KEY_UP   : dir = UP   ; break;
 		case 'a': case KEY_LEFT : dir = LEFT ; break;
