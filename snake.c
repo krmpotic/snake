@@ -110,7 +110,7 @@ rand_food()
 	do { /* infinite loop if snake fills the whole screen? */
 		F.x = ++F.x % col;
 		if (F.x == 0)
-			F.y == ++F.y % row;
+			F.y = ++F.y % row;
 	} while (is_inside_snake(F.y,F.x) || IS_HEAD(F.y, F.x));
 }
 
